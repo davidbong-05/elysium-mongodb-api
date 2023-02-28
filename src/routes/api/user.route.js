@@ -61,10 +61,10 @@ router.put("/", async (req, res) => {
 router.delete("/", async (req, res) => {
 	const target_address = req.body.address;
 	try {
-		const removed = await User.findByIdAndDelete({
+		const removed = await User.findOneAndDelete({
 			address: target_address,
 		});
-		if (!removed) throw Error("Something went wrong ");
+		if (!removed) throw Error("Something went wrong!");
 		res.status(200).json(removed);
 	} catch (error) {
 		res.status(500).json({ message: error.message });
