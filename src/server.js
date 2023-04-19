@@ -16,7 +16,9 @@ app.use(bodyParser.json());
 
 // Routes
 const UserRoutes = require("./routes/api/user.route");
+const CartRoutes = require("./routes/api/cart.route");
 app.use("/api/user", UserRoutes);
+app.use("/api/cart", CartRoutes);
 
 mongoose
 	.connect(uri, {
