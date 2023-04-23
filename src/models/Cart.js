@@ -7,7 +7,7 @@ const CartSchema = new Schema(
 			required: true,
 		},
 		cart_content: {
-			type: [String], //list of NFTs
+			type: [Object], //list of NFTs
 		},
 	},
 	{
