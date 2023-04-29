@@ -39,10 +39,6 @@ const UserSchema = new Schema(
 			type: Date,
 			required: false,
 		},
-		collections: {
-			type: [String], //Array of addresses
-			required: false,
-		},
 		following: {
 			type: [String], //Array of addresses
 			required: false,

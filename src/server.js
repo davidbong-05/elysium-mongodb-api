@@ -17,8 +17,10 @@ app.use(bodyParser.json());
 // Routes
 const UserRoutes = require("./routes/api/user.route");
 const CartRoutes = require("./routes/api/cart.route");
+const CollectionsRoutes = require("./routes/api/nftCollection.route");
 app.use("/api/user", UserRoutes);
 app.use("/api/cart", CartRoutes);
+app.use("/api/collection", CollectionsRoutes);
 
 mongoose
 	.connect(uri, {

@@ -70,39 +70,4 @@ router.delete("/", async (req, res) => {
 		res.status(500).json({ message: error.message });
 	}
 });
-
-router.put("/collections", async (req, res) => {
-	const newUserDetail = req.body;
-
-	try {
-		const user = await User.findOne({ address: newUserDetail.address });
-		if (user) {
-			user.collections = newUserDetail.collections;
-			try {
-				await user.save();
-				res.status(200).json("Update successful");
-			} catch (error) {
-				res.status(500).json({ message: error.message });
-			}
-		} else {
-			res.status(200).json("User not found");
-		}
-	} catch (error) {
-		res.status(500).json({ message: error.message });
-	}
-});
-
-router.get("/collections/:address", async (req, res) => {
-	try {
-		const user = await User.findOne({ address: req.params.address });
-		if (user) {
-			res.status(200).json(user.collections);
-		} else {
-			res.status(200).json("User not found");
-		}
-	} catch (error) {
-		res.status(500).json({ message: error.message });
-	}
-});
-
 module.exports = router;
