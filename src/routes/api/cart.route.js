@@ -51,7 +51,7 @@ router.put("/", async (req, res) => {
 				res.status(500).json({ message: error.message });
 			}
 		} else {
-			res.status(200).json("Cart not found");
+			res.status(404).json("Cart not found");
 		}
 	} catch (error) {
 		res.status(500).json({ message: error.message });

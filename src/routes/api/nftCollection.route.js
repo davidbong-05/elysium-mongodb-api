@@ -40,7 +40,7 @@ router.get("/:address", async (req, res) => {
 		if (nftCollection) {
 			res.status(200).json(nftCollection.address);
 		} else {
-			res.status(200).json("404");
+			res.status(404).json("NFT Collection not found... ...");
 		}
 	} catch (error) {
 		res.status(500).json({ message: error.message });

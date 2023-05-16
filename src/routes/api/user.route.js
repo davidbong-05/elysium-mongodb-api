@@ -21,7 +21,7 @@ router.get("/:address", async (req, res) => {
 		if (user) {
 			res.status(200).json(user);
 		} else {
-			res.status(200).json("User not found");
+			res.status(404).json("User not found");
 		}
 	} catch (error) {
 		res.status(500).json({ message: error.message });
@@ -55,7 +55,7 @@ router.put("/", async (req, res) => {
 				res.status(500).json({ message: error.message });
 			}
 		} else {
-			res.status(200).json("User not found");
+			res.status(404).json("User not found");
 		}
 	} catch (error) {
 		res.status(500).json({ message: error.message });
