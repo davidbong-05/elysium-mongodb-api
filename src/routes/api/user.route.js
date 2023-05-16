@@ -15,7 +15,9 @@ router.get("/", async (req, res) => {
 
 router.get("/:address", async (req, res) => {
 	try {
-		const user = await User.findOne({ address: req.params.address });
+		const user = await User.findOne({
+			address: { $regex: req.params.address, $options: "i" },
+		});
 		if (user) {
 			res.status(200).json(user);
 		} else {
@@ -40,7 +42,9 @@ router.put("/", async (req, res) => {
 	const newUserDetail = req.body;
 
 	try {
-		const user = await User.findOne({ address: newUserDetail.address });
+		const user = await User.findOne({
+			address: { $regex: newUserDetail.address, $options: "i" },
+		});
 		if (user) {
 			user.username = newUserDetail.username;
 			user.email = newUserDetail.email;

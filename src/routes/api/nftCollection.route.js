@@ -35,7 +35,7 @@ router.get("/topCollection", async (req, res) => {
 router.get("/:address", async (req, res) => {
 	try {
 		const nftCollection = await NFTCollection.findOne({
-			user_address: req.params.address,
+			user_address: { $regex: req.params.address, $options: "i" },
 		});
 		if (nftCollection) {
 			res.status(200).json(nftCollection.address);
@@ -62,7 +62,7 @@ router.put("/", async (req, res) => {
 
 	try {
 		const nftCollection = await NFTCollection.findOne({
-			user_address: newCollectionDetail.user_address,
+			user_address: { $regex: newCollectionDetail.user_address, $options: "i" },
 		});
 		if (nftCollection) {
 			nftCollection.address = newCollectionDetail.nft_collection;
@@ -86,7 +86,7 @@ router.delete("/", async (req, res) => {
 	console.log("target", target);
 	try {
 		const removed = await NFTCollection.findOneAndDelete({
-			user_address: target.user_address,
+			user_address: { $regex: target.user_address, $options: "i" },
 		});
 		if (!removed) throw Error("Something went wrong!");
 		res.status(200).json(removed);
