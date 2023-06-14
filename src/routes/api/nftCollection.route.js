@@ -13,6 +13,24 @@ router.get("/", async (req, res) => {
 	}
 });
 
+router.get("/list", async (req, res) => {
+	try {
+		const NFTCollections = await NFTCollection.find();
+		const allAddress = NFTCollections.flatMap((item) =>
+			item.address.map((itemAddress) => itemAddress)
+		);
+		const address = {};
+		for (const item of allAddress) {
+			address[item] = (address[item] || 0) + 1;
+		}
+		const sortedAddress = Object.entries(address).sort((a, b) => b[1] - a[1]);
+		res.status(200).json(sortedAddress);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send("Server error");
+	}
+});
+
 router.get("/topCollection", async (req, res) => {
 	try {
 		const NFTCollections = await NFTCollection.find();
