@@ -101,7 +101,7 @@ router.put("/", async (req, res) => {
 		});
 		if (user) {
 			user.username = newUserDetail.username;
-			user.email = newUserDetail.email;
+			user.description = newUserDetail.description;
 			try {
 				await user.save();
 				res.status(200).json("Update successful");
