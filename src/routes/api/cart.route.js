@@ -40,7 +40,7 @@ router.put("/", async (req, res) => {
 	const newCartDetail = req.body;
 	try {
 		const cart = await Cart.findOne({
-			user_address: newCartDetail.user_address,
+			user_address: { $regex: newCartDetail.user_address, $options: "i" },
 		});
 		if (cart) {
 			cart.cart_content = newCartDetail.cart_content;
@@ -59,10 +59,9 @@ router.put("/", async (req, res) => {
 });
 
 router.delete("/", async (req, res) => {
-	const target_address = req.body.address;
 	try {
 		const removed = await Cart.findOneAndDelete({
-			user_address: target_address,
+			user_address: { $regex: req.body.user_address, $options: "i" },
 		});
 		if (!removed) throw Error("Something went wrong!");
 		res.status(200).json(removed);
