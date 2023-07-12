@@ -1,36 +1,35 @@
 const { Router } = require("express");
-const Cart = require("../../models/Cart");
+const User = require("../../models/User");
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-	try {
-		const carts = await Cart.find();
-		if (!carts) throw new Error("No Cart List found");
-		res.status(200).json(carts);
-	} catch (error) {
-		res.status(500).json({ message: error.message });
-	}
-});
-
-router.post("/check", async (req, res) => {
-	try {
-		const cart = await Cart.findOne({ user_address: req.body.user_address });
-		if (cart) {
-			res.status(200).json(cart);
-		} else {
-			res.status(200).json("Cart not found");
-		}
-	} catch (error) {
-		res.status(500).json({ message: error.message });
-	}
-});
-
 router.post("/", async (req, res) => {
-	const newCart = new Cart(req.body);
 	try {
-		await newCart.save();
-		res.status(200).json("Cart created");
+		const user = await User.findOne({
+			address: { $regex: req.body.user_address, $options: "i" },
+		});
+		res.status(200).json(user.cart_content);
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
+});
+
+router.post("/clear", async (req, res) => {
+	try {
+		const user = await User.findOne({
+			address: { $regex: req.body.user_address, $options: "i" },
+		});
+		if (user) {
+			user.cart_content = [];
+			try {
+				await user.save();
+				res.status(200).json("Update successful");
+			} catch (error) {
+				res.status(500).json({ message: error.message });
+			}
+		} else {
+			res.status(404).json("User not found");
+		}
 	} catch (error) {
 		res.status(500).json({ message: error.message });
 	}
@@ -39,32 +38,20 @@ router.post("/", async (req, res) => {
 router.put("/", async (req, res) => {
 	const newCartDetail = req.body;
 	try {
-		const cart = await Cart.findOne({
-			user_address: { $regex: newCartDetail.user_address, $options: "i" },
+		const user = await User.findOne({
+			address: { $regex: newCartDetail.user_address, $options: "i" },
 		});
-		if (cart) {
-			cart.cart_content = newCartDetail.cart_content;
+		if (user) {
+			user.cart_content = newCartDetail.cart_content;
 			try {
-				await cart.save();
+				await user.save();
 				res.status(200).json("Update successful");
 			} catch (error) {
 				res.status(500).json({ message: error.message });
 			}
 		} else {
-			res.status(404).json("Cart not found");
+			res.status(404).json("User not found");
 		}
-	} catch (error) {
-		res.status(500).json({ message: error.message });
-	}
-});
-
-router.delete("/", async (req, res) => {
-	try {
-		const removed = await Cart.findOneAndDelete({
-			user_address: { $regex: req.body.user_address, $options: "i" },
-		});
-		if (!removed) throw Error("Something went wrong!");
-		res.status(200).json(removed);
 	} catch (error) {
 		res.status(500).json({ message: error.message });
 	}
