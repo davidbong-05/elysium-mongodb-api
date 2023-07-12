@@ -116,6 +116,50 @@ router.put("/", async (req, res) => {
 	}
 });
 
+router.put("/profile_url", async (req, res) => {
+	const newUserDetail = req.body;
+	try {
+		const user = await User.findOne({
+			address: { $regex: newUserDetail.address, $options: "i" },
+		});
+		if (user) {
+			user.profile_url = newUserDetail.profile_url;
+			try {
+				await user.save();
+				res.status(200).json("Update successful");
+			} catch (error) {
+				res.status(500).json({ message: error.message });
+			}
+		} else {
+			res.status(404).json("User not found");
+		}
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
+});
+
+router.put("/background_url", async (req, res) => {
+	const newUserDetail = req.body;
+	try {
+		const user = await User.findOne({
+			address: { $regex: newUserDetail.address, $options: "i" },
+		});
+		if (user) {
+			user.background_url = newUserDetail.background_url;
+			try {
+				await user.save();
+				res.status(200).json("Update successful");
+			} catch (error) {
+				res.status(500).json({ message: error.message });
+			}
+		} else {
+			res.status(404).json("User not found");
+		}
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
+});
+
 router.put("/follow", async (req, res) => {
 	try {
 		const user = await User.findOne({
