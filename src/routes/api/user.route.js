@@ -64,11 +64,17 @@ router.get("/:address/following", async (req, res) => {
 
 router.post("/", async (req, res) => {
 	const newUser = new User(req.body);
-	try {
-		await newUser.save();
-		res.status(200).json("Registration successful");
-	} catch (error) {
-		res.status(500).json({ message: error.message });
+	var regExp = new RegExp(/^[^\s@]+@(siswa\.unimas\.my)|(davidbong05@gmail\.com)$/);
+	if(!regExp.test(newUser.email)) {
+		res.status(400).json({message: "Invalid email"});
+	}
+	else{
+		try {
+			await newUser.save();
+			res.status(200).json("Registration successful");
+		} catch (error) {
+			res.status(500).json({ message: error.message });
+		}
 	}
 });
 
