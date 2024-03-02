@@ -68,6 +68,8 @@ router.get("/:address", async (req, res) => {
 router.post("/", async (req, res) => {
 	const nftCollection = new NFTCollection(req.body);
 	try {
+		nftCollection.meta = {};
+		nftCollection.meta.created_at = new Date();
 		await nftCollection.save();
 		res.status(200).json("NFT Collection created");
 	} catch (error) {
@@ -84,6 +86,7 @@ router.put("/", async (req, res) => {
 		});
 		if (nftCollection) {
 			nftCollection.address = newCollectionDetail.nft_collection;
+			nftCollection.meta.updated_at = new Date();
 			try {
 				await nftCollection.save();
 				res.status(200).json("Update successful");

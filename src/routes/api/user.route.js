@@ -70,6 +70,8 @@ router.post("/", async (req, res) => {
 	}
 	else{
 		try {
+			newUser.meta = {};
+			newUser.meta.created_at = new Date();
 			await newUser.save();
 			res.status(200).json("Registration successful");
 		} catch (error) {
@@ -108,6 +110,7 @@ router.put("/", async (req, res) => {
 		if (user) {
 			user.username = newUserDetail.username;
 			user.description = newUserDetail.description;
+			user.meta.updated_at = new Date();
 			try {
 				await user.save();
 				res.status(200).json("Update successful");

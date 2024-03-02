@@ -21,6 +21,7 @@ router.post("/clear", async (req, res) => {
 		});
 		if (user) {
 			user.cart_content = [];
+			user.meta.updated_at = new Date();
 			try {
 				await user.save();
 				res.status(200).json("Update successful");
@@ -43,6 +44,7 @@ router.put("/", async (req, res) => {
 		});
 		if (user) {
 			user.cart_content = newCartDetail.cart_content;
+			user.meta.updated_at = new Date();
 			try {
 				await user.save();
 				res.status(200).json("Update successful");
