@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const MetaSchema = require("./Meta");
 
 const UserSchema = new Schema(
 	{
@@ -35,10 +36,6 @@ const UserSchema = new Schema(
 			type: String,
 			required: false,
 		},
-		verified_at: {
-			type: Date,
-			required: false,
-		},
 		following: {
 			type: [String], //Array of addresses
 			required: false,
@@ -47,6 +44,10 @@ const UserSchema = new Schema(
 			type: [Object], //list of NFTs
 			required: false,
 		},
+		meta:{
+			type: MetaSchema,
+			required: false,
+		}
 	},
 	{
 		collection: "users",

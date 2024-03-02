@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const MetaSchema = require("./Meta");
 
 const NFTCollectionSchema = new Schema(
 	{
@@ -9,6 +10,9 @@ const NFTCollectionSchema = new Schema(
 		address: {
 			type: [String], //Array of nft collection address
 		},
+		meta:{
+			type: MetaSchema,
+		}
 	},
 	{
 		collection: "NFTCollections",
