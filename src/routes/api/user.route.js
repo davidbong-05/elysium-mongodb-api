@@ -32,6 +32,21 @@ router.get("/topUser", async (req, res) => {
 	}
 });
 
+router.get("/name/:address", async (req, res) => {
+	try {
+		const user = await User.findOne({
+			address: { $regex: req.params.address, $options: "i" },
+		});
+		if (user) {
+			res.status(200).json(user.username);
+		} else {
+			res.status(200).json("address not registered");
+		}
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
+});
+
 router.get("/:address", async (req, res) => {
 	try {
 		const user = await User.findOne({
