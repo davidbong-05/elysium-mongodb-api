@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/davidbong-05/elysium-mongodb-api#readme",
   "dependencies": {
+    "@sendgrid/mail": "^8.1.2",
     "body-parser": "^1.20.1",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
