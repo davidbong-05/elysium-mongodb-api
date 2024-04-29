@@ -16,8 +16,8 @@ const NFTCollectionSchema = new Schema(
 	},
 	{
 		collection: "NFTCollections",
+		timestamps: true 
 	},
-	{ timestamps: true }
 );
 
 const NFTCollection = model("Collections", NFTCollectionSchema);
