@@ -40,6 +40,10 @@ const UserSchema = new Schema(
 			type: [String], //Array of addresses
 			required: false,
 		},
+		followers_count:{
+			type: Number,
+			required: false
+		},
 		cart_content: {
 			type: [Object], //list of NFTs
 			required: false,

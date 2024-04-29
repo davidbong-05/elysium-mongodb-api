@@ -186,20 +186,42 @@ router.put("/background_url", async (req, res) => {
 
 router.put("/follow", async (req, res) => {
 	try {
+		const target_address = req.body.target_address;
 		const user = await User.findOne({
 			address: { $regex: req.body.user_address, $options: "i" },
 		});
+
+		const target_user = await User.findOne({
+			address: { $regex: target_address, $options: "i" },
+		});
+
 		if (user) {
-			user.following.push(req.body.target_address);
+			if(user.following.includes(target_address))
+			{
+				return res.status(400).json("Already following " + target_address);
+			}
 			try {
+				user.following.push(target_address);
 				await user.save();
-				res.status(200).json("Update successful");
 			} catch (error) {
 				res.status(500).json({ message: error.message });
 			}
 		} else {
 			res.status(404).json("User not found");
 		}
+
+		if(target_user)
+		{
+			target_user.followers_count += 1;
+			try {
+				await target_user.save();
+			} catch (error) {
+				res.status(500).json({ message: error.message });
+			}
+		}
+
+		res.status(200).json("Update successful");
+
 	} catch (error) {
 		res.status(500).json({ message: error.message });
 	}
@@ -207,25 +229,44 @@ router.put("/follow", async (req, res) => {
 
 router.put("/unfollow", async (req, res) => {
 	try {
+		const target_address = req.body.target_address;
+
 		const user = await User.findOne({
 			address: { $regex: req.body.user_address, $options: "i" },
 		});
+		const target_user = await User.findOne({
+			address: { $regex: target_address, $options: "i" },
+		});
 		if (user) {
+			if(!user.following.includes(target_address))
+			{
+				return res.status(400).json("Not following " + target_address);
+			}
+
 			const index = user.following.indexOf(
-				req.body.target_address.toLowerCase()
+				target_address.toLowerCase()
 			);
 			if (index !== -1) {
 				user.following.splice(index, 1);
 			}
 			try {
 				await user.save();
-				res.status(200).json("Update successful");
 			} catch (error) {
 				res.status(500).json({ message: error.message });
 			}
 		} else {
 			res.status(404).json("User not found");
 		}
+		if(target_user)
+		{
+			target_user.followers_count -= 1;
+			try {
+				await target_user.save();
+			} catch (error) {
+				res.status(500).json({ message: error.message });
+			}
+		}
+		res.status(200).json("Update successful");
 	} catch (error) {
 		res.status(500).json({ message: error.message });
 	}
