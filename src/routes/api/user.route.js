@@ -15,18 +15,11 @@ router.get("/", async (req, res) => {
 
 router.get("/topUser", async (req, res) => {
 	try {
-		const users = await User.find();
-		const allAddress = users.flatMap((item) =>
-			item.following.map((itemAddress) => itemAddress)
-		);
-		const address = {};
-		for (const item of allAddress) {
-			address[item] = (address[item] || 0) + 1;
-		}
-		const sortedAddress = Object.entries(address).sort((a, b) => b[1] - a[1]);
-		const topUser = sortedAddress.slice(0, 6); //only take 6
-		res.status(200).json(topUser);
-	} catch (err) {
+        const users = await User.find({ followers_count: { $gt: 0 } })
+								.sort({ followers_count: -1 }) // Sort by followers_count in descending order
+								.limit(6); //only take 6
+        res.status(200).json(users);
+    } catch (err) {
 		console.error(err);
 		res.status(500).send("Server error");
 	}
