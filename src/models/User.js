@@ -48,6 +48,10 @@ const UserSchema = new Schema(
 			type: [Object], //list of NFTs
 			required: false,
 		},
+		session_id: {
+			type: String,
+			required: false,
+		},
 		meta:{
 			type: MetaSchema,
 			required: false,
