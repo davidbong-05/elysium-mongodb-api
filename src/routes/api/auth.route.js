@@ -63,7 +63,7 @@ router.post("/logout", async (req, res) => {
             session_id : req.body.session_id,
 		});
 		if (userStatus) {
-            userStatus.reference = Math.random().toString(36).slice(2);
+            userStatus.reference = "logged_out";
 			await userStatus.save();
             res.status(200).send('Logout successfully');
 		} else {
@@ -74,4 +74,24 @@ router.post("/logout", async (req, res) => {
 	}
 });
 
+router.post("/ping", async (req, res) => {
+	try {
+        const userStatus = await UserStatusLog.findOne({
+			address: {
+				$regex: req.body.user_address,
+				$options: "i",
+			},
+            session_id : req.body.session_id,
+		});
+		if (userStatus) {
+            userStatus.reference = Math.random().toString(36).slice(2);
+			await userStatus.save();
+            res.status(200).send('Ping successfully');
+		} else {
+			res.status(404).json("Ping failed");
+		}
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
+});
 module.exports = router;
