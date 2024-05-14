@@ -1,5 +1,4 @@
 const { Schema, model } = require("mongoose");
-const MetaSchema = require("./Meta");
 
 const NFTCollectionSchema = new Schema(
 	{
@@ -9,9 +8,6 @@ const NFTCollectionSchema = new Schema(
 		},
 		address: {
 			type: [String], //Array of nft collection address
-		},
-		meta:{
-			type: MetaSchema,
 		}
 	},
 	{
@@ -20,6 +16,6 @@ const NFTCollectionSchema = new Schema(
 	},
 );
 
-const NFTCollection = model("Collections", NFTCollectionSchema);
+const NFTCollection = model("NFTCollection", NFTCollectionSchema);
 
 module.exports = NFTCollection;

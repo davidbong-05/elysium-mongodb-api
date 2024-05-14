@@ -1,5 +1,4 @@
 const { Schema, model } = require("mongoose");
-const MetaSchema = require("./Meta");
 
 const UserSchema = new Schema(
 	{
@@ -55,18 +54,14 @@ const UserSchema = new Schema(
 		session_id: {
 			type: String,
 			required: false,
-		},
-		meta:{
-			type: MetaSchema,
-			required: false,
 		}
 	},
 	{
-		collection: "users",
+		collection: "Users",
 		timestamps: true
 	},
 );
 
-const User = model("user", UserSchema);
+const User = model("User", UserSchema);
 
 module.exports = User;
