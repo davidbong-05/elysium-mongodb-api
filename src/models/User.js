@@ -54,6 +54,10 @@ const UserSchema = new Schema(
 		session_id: {
 			type: String,
 			required: false,
+		},
+		verifiedAt: {
+			type: Date,
+			required: false,
 		}
 	},
 	{
