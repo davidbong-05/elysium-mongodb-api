@@ -90,9 +90,9 @@ router.post("/ping", async (req, res) => {
 
 router.post('/send-verification-email', async (req, res) => {
 	try{
-		const { to } = req.body;
+		const { email } = req.body;
 		const user = await User.findOne({
-			email: { $regex: to, $options: "i" },
+			email: { $regex: email, $options: "i" },
 		});
 		if (user === null){
 			return res.status(404).send('User not found');
@@ -103,7 +103,7 @@ router.post('/send-verification-email', async (req, res) => {
 		}
 
 		var auth = await Auth.findOne({
-			email: { $regex: to, $options: "i" },
+			email: { $regex: email, $options: "i" },
 		});
 
 		var token = null;
