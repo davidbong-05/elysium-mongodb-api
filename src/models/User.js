@@ -19,6 +19,7 @@ const UserSchema = new Schema(
 		role: {
 			type: String,
 			required: true,
+			default: 'user'
 		},
 		email: {
 			type: String,
@@ -45,7 +46,8 @@ const UserSchema = new Schema(
 		},
 		followers_count:{
 			type: Number,
-			required: false
+			required: false,
+			default: 0
 		},
 		cart_content: {
 			type: [Object], //list of NFTs
