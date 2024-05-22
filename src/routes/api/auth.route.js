@@ -95,11 +95,11 @@ router.post('/send-verification-email', async (req, res) => {
 			email: { $regex: email, $options: "i" },
 		});
 		if (user === null){
-			return res.status(404).send('User not found');
+			return res.status(404).json({message: 'User not found'});
 		}
 
 		if (user.verifiedAt != null){
-			return res.status(400).send('User already verified');
+			return res.status(400).json({message: 'User already verified'});
 		}
 
 		var auth = await Auth.findOne({
@@ -108,17 +108,16 @@ router.post('/send-verification-email', async (req, res) => {
 
 		var token = null;
 		if (!auth) {
-			const expiredAt = moment().add(1, 'hour');
+			const expiredAt = moment().add(1, 'minutes');
 			token = generateRandomString(25);
-			auth = {
+			auth = new Auth({
 				username: user.username,
 				address: user.address,
 				email: user.email,
 				token: token,
 				expiredAt: expiredAt
-			};
-			const newAuth = new Auth(auth);
-			newAuth.save();
+			});
+			auth.save();
 		}
 		else if (auth.expiredAt && moment().isAfter(auth.expiredAt)) {
 			token = generateRandomString(15);
@@ -126,12 +125,12 @@ router.post('/send-verification-email', async (req, res) => {
 			auth.save();
 		}
 		else {
-			return res.status(400).send('An email has been sent previously, please check your inbox or try again after ' + auth.expiredAt);
+			return res.status(400).json({message: 'An email has been sent previously, please check your inbox or try again after ' + auth.expiredAt});
 		}
 
-		const link = 'https://elysium-nft-marketplace.netlify.app/verify?token=';
+		const link = 'https://elysium-nft-marketplace.netlify.app/user/verify?token=';
 		const msg = {
-			to,
+			to: email,
 			from: 'elysium.custodian@gmail.com', // Use the email address you verified with SendGrid
 			subject: 'Verify your email',
 			html: GenerateVerificationEmail(user.username, link, token)
@@ -139,12 +138,12 @@ router.post('/send-verification-email', async (req, res) => {
 		sgMail
 			.send(msg)
 			.then(() => {
-				res.status(200).send('Email sent successfully');
-			})
-			.catch(error => {
-				res.status(500).send('Failed to send email');
+				res.status(200).json({message: 'Email sent successfully'});
+			}).catch(error => {
+				res.status(500).json({message:'Failed to send email'});
 			});
 	} catch (error) {
+		await auth.remove();
 		res.status(500).json({ message: error.message });
 	}
 });
