@@ -19,7 +19,7 @@ const UserSchema = new Schema(
 		role: {
 			type: String,
 			required: true,
-			default: 'user'
+			default: 'unverified-user'
 		},
 		email: {
 			type: String,

@@ -78,7 +78,7 @@ router.post("/", async (req, res) => {
 	}
 	else{
 		try {
-			newUser.role = "user";
+			newUser.role = "unverified-user";
 			await newUser.save();
 			res.status(200).json("Registration successful");
 		} catch (error) {

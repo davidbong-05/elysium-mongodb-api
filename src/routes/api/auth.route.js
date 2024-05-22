@@ -168,6 +168,7 @@ router.post('/verify', async (req, res) => {
 
 		if (auth && token === auth.token && address === auth.address) {
 			user.verifiedAt = moment();
+			user.role = "user";
 			user.save();
 			auth.remove();
 			return res.status(200).send('Verified');
