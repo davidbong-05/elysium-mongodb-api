@@ -71,19 +71,28 @@ router.get("/:address/following", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-	const newUser = new User(req.body);
-	var regExp = new RegExp(/^[^\s@]+@(siswa\.unimas\.my)|(davidbong05@gmail\.com)$/);
-	if(!regExp.test(newUser.email)) {
-		res.status(400).json({message: "Invalid email"});
-	}
-	else{
-		try {
-			newUser.role = "unverified-user";
-			await newUser.save();
-			res.status(200).json("Registration successful");
-		} catch (error) {
-			res.status(500).json({ message: error.message });
+	try{
+		const newUser = new User(req.body);
+		const existingUser = await User.findOne({
+			email: { $regex: newUser.email, $options: "i" },
+		});
+		if(existingUser) {
+			res.status(400).json({message: "Email has been taken by " + existingUser.address +". Please report to the admin if it is not you."});
 		}
+		var regExp = new RegExp(/^[^\s@]+@(siswa\.unimas\.my)|(davidbong05@gmail\.com)$/);
+		if(!regExp.test(newUser.email)) {
+			res.status(400).json({message: "Invalid email"});
+		} else{
+			try {
+				newUser.role = "unverified-user";
+				await newUser.save();
+				res.status(200).json("Registration successful");
+			} catch (error) {
+				res.status(500).json({ message: error.message });
+			}
+		}
+	} catch (error) {
+		res.status(500).json({ message: error.message });
 	}
 });
 
