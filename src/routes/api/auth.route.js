@@ -122,18 +122,17 @@ router.post('/send-verification-email', async (req, res) => {
 		else if (auth.expiredAt && moment().isAfter(auth.expiredAt)) {
 			token = generateRandomString(15);
 			auth.token = token;
+			auth.expiredAt = moment().add(1, 'minutes');
 			auth.save();
 		}
 		else {
 			return res.status(400).json({message: 'An email has been sent previously, please check your inbox or try again after ' + auth.expiredAt});
 		}
-
-		const link = 'https://elysium-nft-marketplace.netlify.app/user/verify?token=';
 		const msg = {
 			to: email,
 			from: 'elysium.custodian@gmail.com', // Use the email address you verified with SendGrid
 			subject: 'Verify your email',
-			html: GenerateVerificationEmail(user.username, link, token)
+			html: GenerateVerificationEmail(user.username, token)
 		};
 		sgMail
 			.send(msg)
