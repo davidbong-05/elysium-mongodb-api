@@ -123,7 +123,7 @@ router.post('/send-verification-email', async (req, res) => {
 			token = generateRandomString(15);
 			auth.token = token;
 			auth.expiredAt = moment().add(1, 'minutes');
-			auth.save();
+			await auth.save();
 		}
 		else {
 			return res.status(400).json({message: 'An email has been sent previously, please check your inbox or try again after ' + auth.expiredAt});
