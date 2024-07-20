@@ -84,20 +84,20 @@ router.post("/", async (req, res) => {
           ". Please report to the admin if it is not you.",
       });
     }
-    var regExp = new RegExp(
-      /^[^\s@]+@(siswa\.unimas\.my)|(davidbong05@gmail\.com)$/
-    );
-    if (!regExp.test(newUser.email)) {
-      res.status(400).json({ message: "Invalid email" });
-    } else {
-      try {
-        newUser.role = "unverified-user";
-        await newUser.save();
-        res.status(200).json("Registration successful");
-      } catch (error) {
-        res.status(500).json({ message: error.message });
-      }
+    // var regExp = new RegExp(
+    //   /^[^\s@]+@(siswa\.unimas\.my)|(davidbong05@gmail\.com)$/
+    // );
+    // if (!regExp.test(newUser.email)) {
+    //   res.status(400).json({ message: "Invalid email" });
+    // } else {
+    try {
+      newUser.role = "unverified-user";
+      await newUser.save();
+      res.status(200).json("Registration successful");
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
+    // }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
