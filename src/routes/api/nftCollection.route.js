@@ -75,7 +75,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.post("/link", async (req, res) => {
+router.put("/link", async (req, res) => {
   try {
     const newCollection = req.body;
     let linkedCollections = await NFTCollection.findOne({
@@ -105,7 +105,7 @@ router.post("/link", async (req, res) => {
   }
 });
 
-router.post("/unlink", async (req, res) => {
+router.put("/unlink", async (req, res) => {
   try {
     const newCollection = req.body;
     let linkedCollections = await NFTCollection.findOne({
