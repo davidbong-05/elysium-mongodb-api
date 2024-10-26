@@ -89,11 +89,40 @@ router.post("/link", async (req, res) => {
     } else if (
       linkedCollections.address.includes(newCollection.collection_address)
     ) {
-      return res.status(301).json("Already linked previously!");
+      return res
+        .status(301)
+        .json(
+          `${newCollection.collection_address} is already linked previously!`
+        );
     } else {
       linkedCollections.address.push(newCollection.collection_address);
     }
-    console.log(linkedCollections);
+    await linkedCollections.save();
+    res.status(200).json(linkedCollections.address);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post("/unlink", async (req, res) => {
+  try {
+    const newCollection = req.body;
+    let linkedCollections = await NFTCollection.findOne({
+      user_address: { $regex: newCollection.user_address, $options: "i" },
+    });
+    if (
+      !linkedCollections ||
+      !linkedCollections.address.includes(newCollection.collection_address)
+    ) {
+      return res
+        .status(301)
+        .json(`${newCollection.collection_address} is not linked previously!`);
+    } else {
+      linkedCollections.address = linkedCollections.address.filter(
+        (address) => address !== newCollection.collection_address
+      );
+    }
     await linkedCollections.save();
     res.status(200).json(linkedCollections.address);
   } catch (error) {
