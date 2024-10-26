@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/topUser", async (req, res) => {
+router.get("/top", async (req, res) => {
   try {
     const users = await User.find({ followers_count: { $gt: 0 } })
       .sort({ followers_count: -1 }) // Sort by followers_count in descending order

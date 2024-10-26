@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/list", async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
     const NFTCollections = await NFTCollection.find();
     const allAddress = NFTCollections.flatMap((item) =>
@@ -31,7 +31,7 @@ router.get("/list", async (req, res) => {
   }
 });
 
-router.get("/topCollection", async (req, res) => {
+router.get("/top", async (req, res) => {
   try {
     const NFTCollections = await NFTCollection.find();
     const allAddress = NFTCollections.flatMap((item) =>
