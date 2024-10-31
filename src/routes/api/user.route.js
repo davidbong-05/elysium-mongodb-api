@@ -25,6 +25,26 @@ router.get("/top", async (req, res) => {
   }
 });
 
+router.get("/name/all", async (req, res) => {
+  try {
+    const users = await User.find(); // Use find() to get all users
+    if (users.length > 0) {
+      res
+        .status(200)
+        .json(
+          users.map((user) => ({
+            address: user.address,
+            username: user.username,
+          }))
+        );
+    } else {
+      res.status(200).json("No registered addresses found.");
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 router.get("/name/:address", async (req, res) => {
   try {
     const user = await User.findOne({
