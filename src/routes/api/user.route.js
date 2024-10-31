@@ -29,14 +29,12 @@ router.get("/name/all", async (req, res) => {
   try {
     const users = await User.find(); // Use find() to get all users
     if (users.length > 0) {
-      res
-        .status(200)
-        .json(
-          users.map((user) => ({
-            address: user.address,
-            username: user.username,
-          }))
-        );
+      res.status(200).json(
+        users.map((user) => ({
+          address: user.address,
+          username: user.username,
+        }))
+      );
     } else {
       res.status(200).json("No registered addresses found.");
     }

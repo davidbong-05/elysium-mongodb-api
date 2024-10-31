@@ -30,10 +30,12 @@ const UserRoutes = require("./routes/api/user.route");
 const AuthRoutes = require("./routes/api/auth.route");
 const CartRoutes = require("./routes/api/cart.route");
 const CollectionsRoutes = require("./routes/api/nftCollection.route");
+const TokenRoutes = require("./routes/api/token.route");
 app.use("/api/user", auth, UserRoutes);
 app.use("/api/auth", auth, AuthRoutes);
 app.use("/api/cart", auth, CartRoutes);
 app.use("/api/collection", auth, CollectionsRoutes);
+app.use("/api/token", auth, TokenRoutes);
 
 mongoose
   .connect(uri, {
